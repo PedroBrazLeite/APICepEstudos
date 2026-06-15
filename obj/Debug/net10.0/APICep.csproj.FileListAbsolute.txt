@@ -1,0 +1,14 @@
+D:\APICep\APICep\APICep\bin\Debug\net10.0\APICep.exe
+D:\APICep\APICep\APICep\bin\Debug\net10.0\APICep.deps.json
+D:\APICep\APICep\APICep\bin\Debug\net10.0\APICep.runtimeconfig.json
+D:\APICep\APICep\APICep\bin\Debug\net10.0\APICep.dll
+D:\APICep\APICep\APICep\bin\Debug\net10.0\APICep.pdb
+D:\APICep\APICep\APICep\obj\Debug\net10.0\APICep.GeneratedMSBuildEditorConfig.editorconfig
+D:\APICep\APICep\APICep\obj\Debug\net10.0\APICep.AssemblyInfoInputs.cache
+D:\APICep\APICep\APICep\obj\Debug\net10.0\APICep.AssemblyInfo.cs
+D:\APICep\APICep\APICep\obj\Debug\net10.0\APICep.csproj.CoreCompileInputs.cache
+D:\APICep\APICep\APICep\obj\Debug\net10.0\APICep.dll
+D:\APICep\APICep\APICep\obj\Debug\net10.0\refint\APICep.dll
+D:\APICep\APICep\APICep\obj\Debug\net10.0\APICep.pdb
+D:\APICep\APICep\APICep\obj\Debug\net10.0\APICep.genruntimeconfig.cache
+D:\APICep\APICep\APICep\obj\Debug\net10.0\ref\APICep.dll
