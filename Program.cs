@@ -5,20 +5,7 @@ Console.Write("Digite um ou mais CEPs separados por ';': ");
 string entrada = Console.ReadLine()!;
 
 string?[] cepsValidos = entrada.Split(';', StringSplitOptions.RemoveEmptyEntries)
-    .Select(item =>
-    {
-        // Extrair para um médodo
-        var sanitizado = CepService.SanitizarCep(item);
-        
-        var valido = CepService.ValidarCep(sanitizado);
-
-        if (!valido)
-        {
-            Console.WriteLine($"CEP inválido: '{sanitizado}' deve ter 8 dígitos numéricos.");
-        }
-
-        return valido ? item : null;
-    })
+    .Select(CepService.ProcessaCep)
     .Where(item => item != null)
     .ToArray();
 

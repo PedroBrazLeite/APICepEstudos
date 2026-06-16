@@ -16,5 +16,5 @@ public class EnderecoResponse
     public string?  Uf { get; init; }
 
     public override string ToString() =>
-        $"CEP: {Cep} | {Logradouro}, {Bairro} — {Localidade}/{Uf}";
+        $"CEP: {Cep} | {Localidade}/{Uf}";
 }

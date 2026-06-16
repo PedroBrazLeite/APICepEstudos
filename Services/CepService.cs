@@ -23,6 +23,18 @@
             return input.Length == 8 && input.All(char.IsDigit);
         }
         
+        public static string? ProcessaCep(string input)
+        {
+            var cleanIput =SanitizarCep(input);
+            var validado = ValidarCep(cleanIput);
+            if (validado == false)
+            {
+                Console.WriteLine($"CEP inválido: '{cleanIput}' deve ter 8 dígitos numéricos.");
+                return null;
+            }
+            return cleanIput;
+        }
+        
         public static async Task<(bool Sucesso, string Cep, EnderecoResponse? Resultado)> BuscarCepAsync(string cep)
         {
             try
@@ -46,4 +58,6 @@
             
             return await Task.WhenAll(tarefas);
         }
+
+ 
     }
