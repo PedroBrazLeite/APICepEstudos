@@ -1,39 +1,49 @@
-﻿using System.Text.Json;
-using APICep.Models;
-
-namespace APICep.Services;
-
-public static class CepService
-{
-    private static readonly HttpClient _client = new();
-   
-    public static string? ValidarCep(string input)
-    {
-        string cep = input.Replace("-", "").Trim();
-
-        if (cep.Length != 8 || !cep.All(char.IsDigit))
-            return null;
-
-        return cep;
-    }
+﻿    using APICep.Models;
+    using Refit;
     
-    public static async Task<EnderecoResponse?> BuscarCepAsync(string cep)
-    {
-        string url = $"https://viacep.com.br/ws/{cep}/json/";
-
-        string json = await _client.GetStringAsync(url);
-
-        var endereco = JsonSerializer.Deserialize<EnderecoResponse>(json);
-
-        if (endereco?.Error == true)
-            return null;
-
-        return endereco;
-    }
+    namespace APICep.Services;
     
-    public static async Task<EnderecoResponse?[]> BuscarCepsAsync(IEnumerable<string> ceps)
+    public static class CepService
     {
-        var tarefas = ceps.Select(BuscarCepAsync);
-        return await Task.WhenAll(tarefas);
+        public interface ICep
+        {
+            [Get("/v1/{cep}")]
+            Task<EnderecoResponse> ObterPorCep(string cep);
+        }
+        
+        static ICep _client = RestService.For<ICep>("https://opencep.com");
+        
+        public static string SanitizarCep(string input)
+        {
+            return input.Replace("-", "").Trim();
+        }
+        
+        public static bool ValidarCep(string input)
+        {
+            return input.Length == 8 && input.All(char.IsDigit);
+        }
+        
+        public static async Task<(bool Sucesso, string Cep, EnderecoResponse? Resultado)> BuscarCepAsync(string cep)
+        {
+            try
+            {
+
+                var endereco = await _client.ObterPorCep(cep);
+                return (true, cep, endereco);
+            }
+            catch (ApiException ex)
+            {
+                Console.WriteLine($"Erro de rede: {ex.Message}");
+
+                return (false, cep, null);
+            }
+        }
+        
+        public static async Task<(bool Sucesso, string Cep, EnderecoResponse? Resultado)[]> BuscarCepsAsync(string[] ceps)
+        {
+            var tarefas = ceps
+                .Select(BuscarCepAsync);
+            
+            return await Task.WhenAll(tarefas);
+        }
     }
-}

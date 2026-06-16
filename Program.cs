@@ -1,48 +1,51 @@
-﻿
-using APICep.Services;
+﻿using APICep.Services;
 
 Console.Write("Digite um ou mais CEPs separados por ';': ");
+
 string entrada = Console.ReadLine()!;
 
-string[] inputs = entrada.Split(';', StringSplitOptions.RemoveEmptyEntries);
+string?[] cepsValidos = entrada.Split(';', StringSplitOptions.RemoveEmptyEntries)
+    .Select(item =>
+    {
+        // Extrair para um médodo
+        var sanitizado = CepService.SanitizarCep(item);
+        
+        var valido = CepService.ValidarCep(sanitizado);
 
-var cepsValidos = new List<string>();
+        if (!valido)
+        {
+            Console.WriteLine($"CEP inválido: '{sanitizado}' deve ter 8 dígitos numéricos.");
+        }
 
-foreach (var input in inputs)
-{
-    string? cep = CepService.ValidarCep(input);
+        return valido ? item : null;
+    })
+    .Where(item => item != null)
+    .ToArray();
 
-    if (cep is null)
-        Console.WriteLine($"CEP inválido: '{input.Trim()}' deve ter 8 dígitos numéricos.");
-    else
-        cepsValidos.Add(cep);
-}
-
-if (cepsValidos.Count == 0)
+if (cepsValidos.Length == 0)
 {
     Console.WriteLine("Nenhum CEP válido informado.");
     return;
 }
 
-Console.WriteLine($"\nBuscando {cepsValidos.Count} CEP(s)...\n");
+Console.WriteLine($"\nBuscando {cepsValidos.Length} CEP(s)...\n");
 
 try
 {
-    var resultados = await CepService.BuscarCepsAsync(cepsValidos);
+    var resultados = await CepService
+        .BuscarCepsAsync(cepsValidos!);
 
-    for (int i = 0; i < cepsValidos.Count; i++)
+    foreach (var result in resultados)
     {
-        var resultado = resultados[i];
-
-        if (resultado is null)
-            Console.WriteLine($"CEP {cepsValidos[i]}: não encontrado.");
+        if (result.Sucesso)
+        {
+            Console.WriteLine(result.Resultado);
+        }
         else
-            Console.WriteLine(resultado);
+        {
+            Console.WriteLine($"CEP {result.Cep}: não encontrado.");
+        }
     }
-}
-catch (HttpRequestException ex)
-{
-    Console.WriteLine($"Erro de rede: {ex.Message}");
 }
 catch (TaskCanceledException)
 {

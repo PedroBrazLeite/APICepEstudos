@@ -1,15 +1,20 @@
 ﻿using System.Text.Json.Serialization;
 namespace APICep.Models;
 
-public record EnderecoResponse(
-    [property: JsonPropertyName("cep")]        string? Cep,
-    [property: JsonPropertyName("logradouro")] string? Logradouro,
-    [property: JsonPropertyName("bairro")]     string? Bairro,
-    [property: JsonPropertyName("localidade")] string? Localidade,
-    [property: JsonPropertyName("uf")]         string? Uf,
-    [property: JsonPropertyName("erro")]       bool? Error  
-)
+public class EnderecoResponse
 {
+ 
+    [JsonPropertyName("cep")] 
+    public string? Cep { get; init; }
+    [JsonPropertyName("logradouro")]
+    public string? Logradouro { get; init; }
+    [JsonPropertyName("bairro")]
+    public string? Bairro { get; init; }
+    [JsonPropertyName("localidade")]
+    public string? Localidade { get; init; }
+    [JsonPropertyName("uf")] 
+    public string?  Uf { get; init; }
+
     public override string ToString() =>
         $"CEP: {Cep} | {Logradouro}, {Bairro} — {Localidade}/{Uf}";
 }
